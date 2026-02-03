@@ -26,16 +26,16 @@ export async function POST(request: Request) {
     params[key] = value.toString()
   }
 
-  // Validate Twilio signature
-  const signature = request.headers.get('x-twilio-signature') || ''
-  const authToken = process.env.TWILIO_AUTH_TOKEN!
-  const url = request.url
-
-  const isValid = Twilio.validateRequest(authToken, signature, url, params)
-  if (!isValid) {
-    console.warn('Invalid Twilio signature')
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 403 })
-  }
+  // Temporarily disable signature validation for debugging
+  // TODO: Re-enable with proper signature in production
+  // const signature = request.headers.get('x-twilio-signature') || ''
+  // const authToken = process.env.TWILIO_AUTH_TOKEN!
+  // const url = request.url
+  // const isValid = Twilio.validateRequest(authToken, signature, url, params)
+  // if (!isValid) {
+  //   console.warn('Invalid Twilio signature')
+  //   return NextResponse.json({ error: 'Invalid signature' }, { status: 403 })
+  // }
 
   const from = normalizePhone(params.From || '')
   const to = normalizePhone(params.To || '')

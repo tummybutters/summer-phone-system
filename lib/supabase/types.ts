@@ -53,6 +53,7 @@ export interface Database {
           call_count?: number
           favorited?: boolean
         }
+        Relationships: []
       }
       conversations: {
         Row: {
@@ -97,6 +98,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       messages: {
         Row: {
@@ -147,6 +149,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       calls: {
         Row: {
@@ -206,6 +209,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
     }
     Views: {

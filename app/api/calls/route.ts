@@ -12,9 +12,26 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const contactId = searchParams.get('contact_id')
   const phoneNumber = searchParams.get('phone_number')
-  const status = searchParams.get('status')
+  const statusParam = searchParams.get('status')
   const limit = parseInt(searchParams.get('limit') || '50')
   const offset = parseInt(searchParams.get('offset') || '0')
+
+  type CallStatus = Database['public']['Tables']['calls']['Row']['status']
+  const allowedStatuses: CallStatus[] = [
+    'ringing',
+    'in-progress',
+    'completed',
+    'failed',
+    'no-answer',
+    'busy'
+  ]
+  const status = statusParam && allowedStatuses.includes(statusParam as CallStatus)
+    ? (statusParam as CallStatus)
+    : null
+
+  if (statusParam && !status) {
+    return NextResponse.json({ error: 'Invalid status filter' }, { status: 400 })
+  }
 
   let query = supabase
     .from('calls')
@@ -84,7 +101,7 @@ export async function POST(request: Request) {
   if (!contact) {
     const { data: newContact } = await supabase
       .from('contacts')
-      .insert({ phone_number: body.to })
+      .insert({ phone_number: body.to } as Database['public']['Tables']['contacts']['Insert'])
       .select('id')
       .single()
     contact = newContact
@@ -100,7 +117,7 @@ export async function POST(request: Request) {
       direction: 'outbound',
       status: 'ringing',
       started_at: new Date().toISOString()
-    })
+    } as Database['public']['Tables']['calls']['Insert'])
     .select()
     .single()
 

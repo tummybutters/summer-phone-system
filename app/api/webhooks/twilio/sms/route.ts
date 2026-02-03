@@ -65,7 +65,7 @@ export async function POST(request: Request) {
   if (!contact) {
     const { data: newContact } = await supabase
       .from('contacts')
-      .insert({ phone_number: from })
+      .insert({ phone_number: from } as Database['public']['Tables']['contacts']['Insert'])
       .select('id')
       .single()
     contact = newContact
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
         contact_id: contact!.id,
         phone_number: from,
         channel: 'twilio-sms'
-      })
+      } as Database['public']['Tables']['conversations']['Insert'])
       .select('id')
       .single()
     conversation = newConversation
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
       status: 'received',
       media_urls: mediaUrls,
       media_types: mediaTypes
-    })
+    } as Database['public']['Tables']['messages']['Insert'])
 
   if (error) {
     console.error('Failed to insert message:', error)

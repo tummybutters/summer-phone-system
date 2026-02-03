@@ -82,7 +82,7 @@ export async function POST(request: Request) {
   if (!contact) {
     const { data: newContact } = await supabase
       .from('contacts')
-      .insert({ phone_number: body.to })
+      .insert({ phone_number: body.to } as Database['public']['Tables']['contacts']['Insert'])
       .select('id')
       .single()
     contact = newContact
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
         contact_id: contact!.id,
         phone_number: body.to,
         channel: body.channel || 'twilio-sms'
-      })
+      } as Database['public']['Tables']['conversations']['Insert'])
       .select('id')
       .single()
     conversation = newConversation
@@ -121,7 +121,7 @@ export async function POST(request: Request) {
       external_id: openclawResult.id,
       media_urls: body.media_urls || [],
       sent_at: new Date().toISOString()
-    })
+    } as Database['public']['Tables']['messages']['Insert'])
     .select()
     .single()
 

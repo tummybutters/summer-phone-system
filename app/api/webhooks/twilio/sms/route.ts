@@ -114,25 +114,29 @@ export async function POST(request: Request) {
 
   // Forward to OpenClaw for AI processing
   try {
-    const openclawWebhookUrl = 'https://summer-phone-system-nw9qvn344-thomas-projects-c7d967ca.vercel.app/webhook/twilio-sms'
+    const openclawWebhookUrl = 'http://localhost:18789/hooks/agent'
     const forwardResponse = await fetch(openclawWebhookUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams(params)
     })
-    
+
     if (forwardResponse.ok) {
       console.log('✅ Message forwarded to OpenClaw successfully')
     } else {
-      console.error('❌ Failed to forward to OpenClaw:', forwardResponse.status, await forwardResponse.text())
+      console.error(
+        '❌ Failed to forward to OpenClaw:',
+        forwardResponse.status,
+        await forwardResponse.text()
+      )
     }
   } catch (error) {
     console.error('❌ Error forwarding to OpenClaw:', error)
   }
 
-  // Return empty TwiML - OpenClaw handles the AI response
+  // Return empty TwiML - responses are handled separately
   return new NextResponse(
     '<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
     {

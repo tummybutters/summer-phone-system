@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "app/api/webhooks/twilio/sms/route.ts": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/webhook/twilio-sms",
+      "destination": "/api/webhooks/twilio/sms"
+    }
+  ]
+}

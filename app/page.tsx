@@ -1,82 +1,103 @@
+import { GlassCard } from '@/app/components/ui/glass-card'
+import {
+  MessageSquare,
+  Users,
+  Phone,
+  Settings,
+  Activity,
+  Smartphone
+} from 'lucide-react'
 import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-8">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          🌞 Summer's Phone
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Digital phone system dashboard
-        </p>
+    <main className="min-h-screen p-8 md:p-12 space-y-12 max-w-7xl mx-auto">
+      {/* Header */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="text-5xl md:text-6xl font-heading font-bold bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">
+            Summer's Phone
+          </h1>
+          <p className="text-xl text-muted-foreground mt-4 max-w-lg">
+            Manage your AI-powered communication hub with real-time insights and controls.
+          </p>
+        </div>
+        <div className="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 backdrop-blur-md">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-sm font-medium text-white/80">System Online</span>
+        </div>
       </header>
 
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <DashboardCard
+        <DashboardLink
           href="/conversations"
           title="Conversations"
-          description="View and manage message threads"
-          icon="💬"
-          stat="0 unread"
+          description="View managed threads"
+          icon={<MessageSquare className="w-8 h-8 text-primary" />}
+          stat="Active"
         />
-        <DashboardCard
+        <DashboardLink
           href="/contacts"
           title="Contacts"
-          description="Manage your contact list"
-          icon="👥"
-          stat="View all"
+          description="Manage client list"
+          icon={<Users className="w-8 h-8 text-secondary" />}
+          stat="Database"
         />
-        <DashboardCard
+        <DashboardLink
           href="/calls"
           title="Calls"
-          description="Call history and recordings"
-          icon="📞"
+          description="History & Recordings"
+          icon={<Phone className="w-8 h-8 text-blue-400" />}
           stat="Recent"
         />
-        <DashboardCard
+        <DashboardLink
           href="/settings"
           title="Settings"
-          description="AI preferences and configuration"
-          icon="⚙️"
+          description="AI Configuration"
+          icon={<Settings className="w-8 h-8 text-emerald-400" />}
           stat="Configure"
         />
       </div>
 
-      <section className="mt-12">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Recent Activity
-        </h2>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-            Connect Supabase to see recent activity
-          </p>
-        </div>
-      </section>
-
-      <section className="mt-8">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Phone Number
-        </h2>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center gap-4">
-            <div className="text-4xl">📱</div>
-            <div>
-              <p className="text-2xl font-mono text-gray-900 dark:text-white">
-                +1 (844) 902-3577
-              </p>
-              <p className="text-gray-500 dark:text-gray-400">
-                Twilio SMS/Voice
-              </p>
-            </div>
+      {/* Activity & Info */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section className="lg:col-span-2 space-y-6">
+          <div className="flex items-center gap-3">
+            <Activity className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-heading font-semibold text-white">Recent Activity</h2>
           </div>
-        </div>
-      </section>
-    </div>
+          <GlassCard className="min-h-[200px] flex items-center justify-center">
+            <div className="text-center space-y-2">
+              <p className="text-muted-foreground">Waiting for Supabase connection...</p>
+            </div>
+          </GlassCard>
+        </section>
+
+        <section className="space-y-6">
+          <div className="flex items-center gap-3">
+            <Smartphone className="w-6 h-6 text-purple-400" />
+            <h2 className="text-2xl font-heading font-semibold text-white">Active Number</h2>
+          </div>
+          <GlassCard className="space-y-4">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Twilio Voice</p>
+                <p className="text-3xl font-mono text-white mt-1 tracking-tight">+1 (844) 902-3577</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <span className="px-3 py-1 bg-white/5 rounded-md text-xs font-medium border border-white/5">SMS Active</span>
+              <span className="px-3 py-1 bg-white/5 rounded-md text-xs font-medium border border-white/5">Voice Active</span>
+            </div>
+          </GlassCard>
+        </section>
+      </div>
+    </main>
   )
 }
 
-function DashboardCard({
+function DashboardLink({
   href,
   title,
   description,
@@ -86,24 +107,34 @@ function DashboardCard({
   href: string
   title: string
   description: string
-  icon: string
+  icon: React.ReactNode
   stat: string
 }) {
   return (
-    <Link
-      href={href}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
-    >
-      <div className="text-3xl mb-4">{icon}</div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        {title}
-      </h3>
-      <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-        {description}
-      </p>
-      <p className="text-blue-600 dark:text-blue-400 text-sm mt-4 font-medium">
-        {stat} →
-      </p>
+    <Link href={href} className="group">
+      <GlassCard className="h-full relative overflow-hidden group-hover:border-primary/50 transition-colors">
+        <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+          {/* Glow effect */}
+          <div className="w-24 h-24 bg-primary/20 rounded-full blur-2xl -mr-12 -mt-12 group-hover:bg-primary/30 transition-all" />
+        </div>
+
+        <div className="relative z-10 space-y-4">
+          <div className="p-3 bg-white/5 w-fit rounded-xl border border-white/5 group-hover:bg-primary/10 transition-colors shadow-inner">
+            {icon}
+          </div>
+          <div>
+            <h3 className="text-xl font-heading font-semibold text-white group-hover:text-primary transition-colors">
+              {title}
+            </h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              {description}
+            </p>
+          </div>
+          <div className="pt-2 flex items-center text-sm font-medium text-white/50 group-hover:text-white transition-colors">
+            {stat} <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </div>
+      </GlassCard>
     </Link>
   )
 }

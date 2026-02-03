@@ -1,6 +1,5 @@
-import type { NextConfig } from 'next'
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   /* config options here */
   env: {
     // Twilio
@@ -21,6 +20,6 @@ const nextConfig: NextConfig = {
     // OpenAI
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   }
-}
+};
 
-export default nextConfig
+module.exports = nextConfig;

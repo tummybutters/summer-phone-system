@@ -18,7 +18,7 @@ function normalizePhone(phone: string): string {
 }
 
 // POST /api/webhooks/twilio/sms - Twilio SMS webhook
-// This is a secondary persistence layer - OpenClaw handles the main routing
+// This is a secondary persistence layer
 export async function POST(request: Request) {
   const body = await request.formData()
   const params: Record<string, string> = {}
@@ -110,30 +110,6 @@ export async function POST(request: Request) {
     console.error('Failed to insert message:', error)
   } else {
     console.log('✅ Message stored in Supabase:', { messageSid, from, body: messageBody })
-  }
-
-  // Forward to OpenClaw for AI processing
-  try {
-    const openclawWebhookUrl = 'http://localhost:18789/hooks/agent'
-    const forwardResponse = await fetch(openclawWebhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams(params)
-    })
-
-    if (forwardResponse.ok) {
-      console.log('✅ Message forwarded to OpenClaw successfully')
-    } else {
-      console.error(
-        '❌ Failed to forward to OpenClaw:',
-        forwardResponse.status,
-        await forwardResponse.text()
-      )
-    }
-  } catch (error) {
-    console.error('❌ Error forwarding to OpenClaw:', error)
   }
 
   // Return empty TwiML - responses are handled separately
